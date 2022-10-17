@@ -1,0 +1,56 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon node src/index.js",
+    "format": "prettier --write .",
+    "lint": "eslint --fix . --ext .js,.jsx",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "FUFVDEV",
+  "license": "ISC",
+  "dependencies": {
+    "@sinclair/typebox": "^0.24.46",
+    "ajv": "^8.11.0",
+    "ajv-errors": "^3.0.0",
+    "ajv-formats": "^2.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.1.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
+  },
+  "imports": {
+    "#config/*": [
+      "./src/config/*"
+    ],
+    "#controllers/*": [
+      "./src/controllers/*"
+    ],
+    "#dto/*": [
+      "./src/dto/*"
+    ],
+    "#middlewares/*": [
+      "./src/middlewares/*"
+    ],
+    "#models/*": [
+      "./src/models/*"
+    ],
+    "#routes/*": [
+      "./src/routes/*"
+    ]
+  }
+}
