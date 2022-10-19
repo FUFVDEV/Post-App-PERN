@@ -3,11 +3,10 @@ import Ajv from "ajv";
 import addErrors from "ajv-errors";
 
 import { dtoMiddleware } from "#middlewares/dto.middleware.js";
-import { descriptionDTOSchema, idDTOSchema, nameDTOSchema } from "#dto/dto-types.js";
+import { descriptionDTOSchema, nameDTOSchema } from "#dto/dto-types.js";
 
 const PostUpdateDTOSchema = Type.Object(
   {
-    id: idDTOSchema,
     name: nameDTOSchema,
     description: descriptionDTOSchema,
   },

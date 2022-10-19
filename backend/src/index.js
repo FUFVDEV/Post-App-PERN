@@ -1,4 +1,5 @@
 import "#config/load.env.js";
+import "#config/sequelize.js";
 import httpServer from "#config/httpServer.js";
 
 const main = () => {

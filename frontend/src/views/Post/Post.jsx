@@ -14,7 +14,7 @@ import "./Post.css";
 
 const Post = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [isEditMode, setEditMode] = useState(false);
+
   const userId = useRef(null);
 
   const dispatch = useDispatch();

@@ -12,7 +12,6 @@ import {
   setPosts,
   startPostOperation,
 } from "redux/slices/postSlice";
-// import ErrorList from "antd/lib/form/ErrorList";
 
 const BAD_REQUEST_CODE = 400;
 const INTERNAL_SERVER_ERROR_CODE = 500;
@@ -89,15 +88,15 @@ function* createPostSaga({ payload }) {
 }
 
 function* editPostSaga({ payload: post }) {
+  const { id, name, description } = post;
+
   try {
     yield put(startPostOperation());
 
-    const response = yield call(
-      httpAction,
-      generateEndpoint("post", { params: { id: post.id } }),
-      "PUT",
-      post
-    );
+    const response = yield call(httpAction, generateEndpoint("post", { params: { id } }), "PUT", {
+      name,
+      description,
+    });
 
     const data = yield call([response, "json"]);
 

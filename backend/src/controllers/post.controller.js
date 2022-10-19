@@ -1,9 +1,18 @@
+import { Op } from "sequelize";
+
 import PostModel from "#models/post.model.js";
 
 const getPosts = (req, res, next) => {
-  const filters = req.query;
+  const { name: filterByName = "" } = req.query;
 
-  PostModel.getPosts(filters)
+  PostModel.findAll({
+    where: {
+      name: {
+        [Op.iLike]: `%${filterByName}%`,
+      },
+    },
+    order: [["id", "DESC"]],
+  })
     .then(response => {
       return res.status(200).send(response);
     })
@@ -20,7 +29,7 @@ const createPost = (req, res, next) => {
     description: req.body.description,
   };
 
-  PostModel.createPost(newPost)
+  PostModel.create(newPost)
     .then(response => {
       return res.status(201).send(response);
     })
@@ -35,13 +44,18 @@ const editPost = (req, res, next) => {
   const { id } = req.params;
 
   const newData = {
-    id,
     name: req.body.name,
     description: req.body.description,
   };
 
-  PostModel.updatePost(newData)
-    .then(response => res.status(200).send(response))
+  PostModel.update(newData, {
+    where: {
+      id,
+    },
+    returning: true,
+    plain: true,
+  })
+    .then(response => res.status(200).send(response[1]))
     .catch(error => {
       error.status = 500;
       error.errorMessage = "Error al intentar editar el post.";
@@ -52,8 +66,13 @@ const editPost = (req, res, next) => {
 const deletePost = (req, res, next) => {
   const { id } = req.params;
 
-  PostModel.deletePost(id)
+  PostModel.findOne({
+    where: { id },
+  })
     .then(response => {
+      if (!response) throw new Error("El post que intenta eliminar, no existe.");
+
+      response.destroy();
       res.status(200).send(response);
     })
     .catch(error => {
