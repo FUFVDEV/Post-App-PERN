@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Form, Input, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -8,9 +9,7 @@ import { getPosts } from "redux/actions/postActions";
 const Searcher = () => {
   const dispatch = useDispatch();
 
-  const {
-    filter: { name },
-  } = useSelector(state => state.post);
+  const { name } = useSelector(state => state.post.filter);
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(setHandleFilter({ name, value }));
@@ -63,4 +62,4 @@ const Searcher = () => {
   );
 };
 
-export default Searcher;
+export default memo(Searcher);

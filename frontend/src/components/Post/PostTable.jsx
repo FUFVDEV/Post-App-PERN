@@ -1,9 +1,30 @@
+import { memo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 import { DELETE_ACTION, EDIT_ACTION } from "consts";
+import { setEditMode, setPost } from "redux/slices/postSlice";
 
-const PostTable = ({ data = [], handleAction, loading }) => {
+const PostTable = ({ setIsModalVisible, userId }) => {
+  const dispatch = useDispatch();
+
+  const data = useSelector(state => state.post.posts);
+  const loading = useSelector(state => state.post.isLoading);
+
+  const handleAction = ({ action, payload }) => {
+    const options = {
+      [EDIT_ACTION]: () => dispatch(setPost(payload)),
+      [DELETE_ACTION]: () => {
+        setIsModalVisible(true);
+        userId.current = payload;
+      },
+    };
+
+    options[action]();
+    dispatch(setEditMode(action === EDIT_ACTION));
+  };
+
   const columns = [
     {
       title: "Id",
@@ -55,4 +76,4 @@ const PostTable = ({ data = [], handleAction, loading }) => {
   );
 };
 
-export default PostTable;
+export default memo(PostTable);

@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { DELETE_ACTION, EDIT_ACTION } from "consts";
-import { createPost, deletePost, editPost, getPosts } from "redux/actions/postActions";
-import { setEditMode, setPost } from "redux/slices/postSlice";
+// import { DELETE_ACTION, EDIT_ACTION } from "consts";
+import { deletePost, getPosts } from "redux/actions/postActions";
+// import { setEditMode, setPost } from "redux/slices/postSlice";
 import CustomModal from "components/ui/CustomModal";
 import PostForm from "components/Post/PostForm";
 import PostTable from "components/Post/PostTable";
@@ -19,29 +19,12 @@ const Post = () => {
 
   const dispatch = useDispatch();
 
-  const { posts, isEditMode, isLoading } = useSelector(state => state.post);
-
   useEffect(() => {
     dispatch(getPosts());
   }, []);
 
-  const handleAction = ({ action, payload }) => {
-    const options = {
-      [EDIT_ACTION]: () => dispatch(setPost(payload)),
-      [DELETE_ACTION]: () => {
-        setIsModalVisible(true);
-        userId.current = payload;
-      },
-    };
-
-    options[action]();
-    dispatch(setEditMode(action === EDIT_ACTION));
-  };
-
   const handleCancelModal = () => setIsModalVisible(false);
 
-  const handleCreate = data => dispatch(createPost(data));
-  const handleEdit = data => dispatch(editPost(data));
   const handleDelete = () => {
     dispatch(deletePost(userId.current));
     handleCancelModal();
@@ -52,12 +35,11 @@ const Post = () => {
       <TitleWithLine text="Gestión de Posts" />
 
       <PostSearcher />
-      <PostTable data={posts} handleAction={handleAction} loading={isLoading} />
-      <PostForm handleCreate={handleCreate} handleEdit={handleEdit} isEditMode={isEditMode} />
+      <PostTable setIsModalVisible={setIsModalVisible} userId={userId} />
+      <PostForm />
 
       <CustomModal
         isVisible={isModalVisible}
-        stateHandler={setIsModalVisible}
         handleOk={handleDelete}
         handleCancel={handleCancelModal}
       >

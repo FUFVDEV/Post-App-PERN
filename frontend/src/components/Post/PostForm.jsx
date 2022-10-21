@@ -1,17 +1,23 @@
+import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Button, Col, Form, Input, Row } from "antd";
 import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+
+import { createPost, editPost } from "redux/actions/postActions";
 import { setHandleChange } from "redux/slices/postSlice";
 
-const PostForm = ({ handleCreate, handleEdit, isEditMode }) => {
+const PostForm = () => {
   const dispatch = useDispatch();
 
-  const { post } = useSelector(state => state.post);
+  const post = useSelector(state => state.post.post);
+  const isEditMode = useSelector(state => state.post.isEditMode);
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(setHandleChange({ name, value }));
   };
+
+  const handleCreate = data => dispatch(createPost(data));
+  const handleEdit = data => dispatch(editPost(data));
 
   return (
     <Form layout="vertical">
@@ -60,4 +66,4 @@ const PostForm = ({ handleCreate, handleEdit, isEditMode }) => {
   );
 };
 
-export default PostForm;
+export default memo(PostForm);
